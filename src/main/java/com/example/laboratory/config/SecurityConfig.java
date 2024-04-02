@@ -33,7 +33,7 @@ public class SecurityConfig {
                 });
 
         http.authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/lab/send").permitAll();
+                    auth.requestMatchers("/lab/send", "/member/login").permitAll();
                     auth.anyRequest().authenticated(); // 그 외의 것들은 모두 인증, 인가를 거치도록 설정
                 })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

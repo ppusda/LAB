@@ -1,5 +1,7 @@
 package com.example.laboratory.service;
 
+import com.example.laboratory.entity.Member;
+import com.example.laboratory.repository.MemberRepository;
 import com.example.laboratory.util.Channel;
 import com.example.laboratory.entity.Notification;
 import com.example.laboratory.util.NotificationType;
@@ -23,12 +25,22 @@ public class NotificationService {
     private final DeferredResultRepository deferredResultRepository;
 
     private final static Long TIMEOUT = 60000L;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public void sendArtistNotification(NotificationType notificationType) {
+
+        Member subscriber = memberRepository.findById(1L)
+                .orElseThrow(RuntimeException::new);
+
+        Member publisher = memberRepository.findById(2L)
+                .orElseThrow(RuntimeException::new);
+
         // 팔로워 별로 알림 생성
         Notification notification = notificationRepository.save(Notification.builder()
                 .message(notificationType.getMessage())
+                .subscriber(subscriber)
+                .publisher(publisher)
                 .redirectUrl("redirectUrl")
                 .build()
         );
